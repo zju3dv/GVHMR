@@ -1,0 +1,17 @@
+# @package _global_
+defaults:
+  - override /data: mocap/testY
+  - override /test_datasets:
+      - rich/all
+  - override /callbacks:
+      - metric_rich
+  - _self_
+
+task: test
+data_name: test_mocap
+ckpt_path: ??? # will not override previous setting if already set
+
+# lightning utilities
+pl_trainer:
+  devices: 1
+logger: null

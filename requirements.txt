@@ -1,0 +1,46 @@
+# PyTorch
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch==2.3.0+cu121
+torchvision==0.18.0+cu121
+timm==0.9.12  # For HMR2.0a feature extraction
+
+# Lightning + Hydra
+lightning==2.3.0
+hydra-core==1.3
+hydra-zen
+hydra_colorlog
+rich
+
+# Common utilities
+numpy==1.23.5
+jupyter
+matplotlib
+ipdb
+setuptools>=68.0
+black
+tensorboardX
+opencv-python
+ffmpeg-python
+scikit-image
+termcolor
+einops
+imageio==2.34.1
+av  # imageio[pyav], improved performance over imageio[ffmpeg]
+joblib
+
+# Diffusion
+# diffusers[torch]==0.19.3
+# transformers==4.31.0
+
+# 3D-Vision
+pytorch3d @ https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py310_cu121_pyt230/pytorch3d-0.7.6-cp310-cp310-linux_x86_64.whl
+trimesh
+chumpy
+smplx
+# open3d==0.17.0
+wis3d
+
+# 2D-Pose
+ultralytics==8.2.42  # YOLO
+cython_bbox
+lapx

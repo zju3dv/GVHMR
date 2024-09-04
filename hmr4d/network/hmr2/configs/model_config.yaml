@@ -1,0 +1,131 @@
+task_name: train
+tags:
+- dev
+train: true
+test: false
+ckpt_path: null
+seed: null
+DATASETS:
+  TRAIN:
+    H36M-TRAIN:
+      WEIGHT: 0.3
+    MPII-TRAIN:
+      WEIGHT: 0.1
+    COCO-TRAIN-2014:
+      WEIGHT: 0.4
+    MPI-INF-TRAIN:
+      WEIGHT: 0.2
+  VAL:
+    COCO-VAL:
+      WEIGHT: 1.0
+  MOCAP: CMU-MOCAP
+  CONFIG:
+    SCALE_FACTOR: 0.3
+    ROT_FACTOR: 30
+    TRANS_FACTOR: 0.02
+    COLOR_SCALE: 0.2
+    ROT_AUG_RATE: 0.6
+    TRANS_AUG_RATE: 0.5
+    DO_FLIP: true
+    FLIP_AUG_RATE: 0.5
+    EXTREME_CROP_AUG_RATE: 0.1
+trainer:
+  _target_: pytorch_lightning.Trainer
+  default_root_dir: ${paths.output_dir}
+  accelerator: gpu
+  devices: 8
+  deterministic: false
+  num_sanity_val_steps: 0
+  log_every_n_steps: ${GENERAL.LOG_STEPS}
+  val_check_interval: ${GENERAL.VAL_STEPS}
+  precision: 16
+  max_steps: ${GENERAL.TOTAL_STEPS}
+  move_metrics_to_cpu: true
+  limit_val_batches: 1
+  track_grad_norm: 2
+  strategy: ddp
+  num_nodes: 1
+  sync_batchnorm: true
+paths:
+  root_dir: ${oc.env:PROJECT_ROOT}
+  data_dir: ${paths.root_dir}/data/
+  log_dir: /fsx/shubham/code/hmr2023/logs_hydra/
+  output_dir: ${hydra:runtime.output_dir}
+  work_dir: ${hydra:runtime.cwd}
+extras:
+  ignore_warnings: false
+  enforce_tags: true
+  print_config: true
+exp_name: 3001d
+SMPL:
+  MODEL_PATH: data/smpl
+  GENDER: neutral
+  NUM_BODY_JOINTS: 23
+  JOINT_REGRESSOR_EXTRA: data/SMPL_to_J19.pkl
+  MEAN_PARAMS: data/smpl_mean_params.npz
+EXTRA:
+  FOCAL_LENGTH: 5000
+  NUM_LOG_IMAGES: 4
+  NUM_LOG_SAMPLES_PER_IMAGE: 8
+  PELVIS_IND: 39
+MODEL:
+  IMAGE_SIZE: 256
+  IMAGE_MEAN:
+  - 0.485
+  - 0.456
+  - 0.406
+  IMAGE_STD:
+  - 0.229
+  - 0.224
+  - 0.225
+  BACKBONE:
+    TYPE: vit
+    FREEZE: true
+    NUM_LAYERS: 50
+    OUT_CHANNELS: 2048
+  ADD_NECK: false
+  FLOW:
+    DIM: 144
+    NUM_LAYERS: 4
+    CONTEXT_FEATURES: 2048
+    LAYER_HIDDEN_FEATURES: 1024
+    LAYER_DEPTH: 2
+  FC_HEAD:
+    NUM_FEATURES: 1024
+  SMPL_HEAD:
+    TYPE: transformer_decoder
+    IN_CHANNELS: 2048
+    TRANSFORMER_DECODER:
+      depth: 6
+      heads: 8
+      mlp_dim: 1024
+      dim_head: 64
+      dropout: 0.0
+      emb_dropout: 0.0
+      norm: layer
+      context_dim: 1280
+GENERAL:
+  TOTAL_STEPS: 100000
+  LOG_STEPS: 100
+  VAL_STEPS: 100
+  CHECKPOINT_STEPS: 1000
+  CHECKPOINT_SAVE_TOP_K: -1
+  NUM_WORKERS: 6
+  PREFETCH_FACTOR: 2
+TRAIN:
+  LR: 0.0001
+  WEIGHT_DECAY: 0.0001
+  BATCH_SIZE: 512
+  LOSS_REDUCTION: mean
+  NUM_TRAIN_SAMPLES: 2
+  NUM_TEST_SAMPLES: 64
+  POSE_2D_NOISE_RATIO: 0.01
+  SMPL_PARAM_NOISE_RATIO: 0.005
+LOSS_WEIGHTS:
+  KEYPOINTS_3D: 0.05
+  KEYPOINTS_2D: 0.01
+  GLOBAL_ORIENT: 0.001
+  BODY_POSE: 0.001
+  BETAS: 0.0005
+  ADVERSARIAL: 0.0005
+local: {}

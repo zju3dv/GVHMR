@@ -1,0 +1,35 @@
+pipeline:
+  _target_: hmr4d.model.gvhmr.pipeline.gvhmr_pipeline.Pipeline
+  args_denoiser3d: ${network}
+  args:
+    endecoder_opt: ${endecoder}
+    normalize_cam_angvel: true
+    weights: null
+    static_conf: null
+model:
+  _target_: hmr4d.model.gvhmr.gvhmr_pl_demo.DemoPL
+  pipeline: ${pipeline}
+network:
+  _target_: hmr4d.network.gvhmr.relative_transformer.NetworkEncoderRoPEV2
+  output_dim: 151
+  max_len: 120
+  kp2d_mapping: linear_v2
+  cliffcam_dim: 3
+  cam_angvel_dim: 6
+  imgseq_dim: 1024
+  f_imgseq_filter: null
+  cond_ver: v1
+  latent_dim: 512
+  num_layers: 12
+  num_heads: 8
+  mlp_ratio: 4.0
+  pred_cam_ver: v2
+  pred_cam_dim: 3
+  static_conf_dim: 6
+  pred_coco17_dim: 0
+  dropout: 0.1
+  avgbeta: true
+endecoder:
+  _target_: hmr4d.model.gvhmr.utils.endecoder.EnDecoder
+  stats_name: MM_V1_AMASS_LOCAL_BEDLAM_CAM
+  noise_pose_k: 10

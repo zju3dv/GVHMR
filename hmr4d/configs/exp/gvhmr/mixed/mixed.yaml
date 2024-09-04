@@ -1,0 +1,71 @@
+# @package _global_
+defaults:
+    - override /data: mocap/trainX_testY
+    - override /model: gvhmr/gvhmr_pl
+    - override /endecoder: gvhmr/v1_amass_local_bedlam_cam
+    - override /optimizer: adamw_2e-4
+    - override /scheduler_cfg: epoch_half_200_350
+    - override /train_datasets:
+          - pure_motion_amass/v11
+          - imgfeat_bedlam/v2
+          - imgfeat_h36m/v1
+          - imgfeat_3dpw/v1
+    - override /test_datasets:
+          - emdb1/v1_fliptest
+          - emdb2/v1_fliptest
+          - rich/all
+          - 3dpw/fliptest
+    - override /callbacks:
+          - simple_ckpt_saver/every10e_top100
+          - prog_bar/prog_reporter_every0.1
+          - train_speed_timer/base
+          - lr_monitor/pl
+          - metric_emdb1
+          - metric_emdb2
+          - metric_rich
+          - metric_3dpw
+    - override /network: gvhmr/relative_transformer
+
+exp_name_base: mixed
+exp_name_var: ""
+exp_name: ${exp_name_base}${exp_name_var}
+data_name: mocap_mixed_v1
+
+pipeline:
+    _target_: hmr4d.model.gvhmr.pipeline.gvhmr_pipeline.Pipeline
+    args_denoiser3d: ${network}
+    args:
+        endecoder_opt: ${endecoder}
+        normalize_cam_angvel: True
+        weights:
+            cr_j3d: 500.
+            transl_c: 1.
+            cr_verts: 500.
+            j2d: 1000.
+            verts2d: 1000.
+
+            transl_w: 1.
+            static_conf_bce: 1.
+
+        static_conf:
+            vel_thr: 0.15
+
+data:
+    loader_opts:
+        train:
+            batch_size: 128
+            num_workers: 12
+
+pl_trainer:
+    precision: 16-mixed
+    log_every_n_steps: 50
+    gradient_clip_val: 0.5
+    max_epochs: 500
+    check_val_every_n_epoch: 10
+    devices: 2
+
+logger:
+    _target_: pytorch_lightning.loggers.TensorBoardLogger
+    save_dir: ${output_dir} # /save_dir/name/version/sub_dir
+    name: ""
+    version: "tb" # merge name and version

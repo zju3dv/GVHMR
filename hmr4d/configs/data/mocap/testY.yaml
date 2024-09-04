@@ -1,0 +1,10 @@
+# definition of lightning datamodule (dataset + dataloader)
+_target_: hmr4d.datamodule.mocap_trainX_testY.DataModule
+
+dataset_opts:
+  test: ${test_datasets}
+
+loader_opts:
+  test:
+    batch_size: 1
+    num_workers: 0

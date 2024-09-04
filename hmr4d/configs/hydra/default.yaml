@@ -1,0 +1,19 @@
+# enable color logging
+defaults:
+  - override hydra_logging: colorlog
+  - override job_logging: colorlog
+
+job_logging:
+  formatters:
+    simple:
+      datefmt: '%m/%d %H:%M:%S'
+      format: '[%(asctime)s][%(levelname)s] %(message)s'
+    colorlog:
+      datefmt: '%m/%d %H:%M:%S'
+      format: '[%(cyan)s%(asctime)s%(reset)s][%(log_color)s%(levelname)s%(reset)s] %(message)s'
+  handlers:
+    file:
+      filename: ${output_dir}/${hydra.job.name}.log
+
+run:
+  dir: ${output_dir}
