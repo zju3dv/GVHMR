@@ -54,6 +54,18 @@ To train the model, use the following command:
     ```
     During training, note that we do not employ post-processing as in the test script, so the global metrics results will differ (but should still be good for comparison with baseline methods).
 
+# Citation
+
+If you find this code useful for your research, please use the following BibTeX entry.
+
+```
+@inproceedings{shen2024gvhmr,
+  title={World-Grounded Human Motion Recovery via Gravity-View Coordinates},
+  author={Shen, Zehong and Pi, Huaijin and Xia, Yan and Cen, Zhi and Peng, Sida and Hu, Zechen and Bao, Hujun and Hu, Ruizhen and Zhou, Xiaowei},
+  booktitle={SIGGRAPH Asia Conference Proceedings},
+  year={2024}
+}
+```
 
 # Acknowledgement
 
