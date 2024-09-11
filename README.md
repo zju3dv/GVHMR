@@ -1,5 +1,5 @@
 # World-Grounded Human Motion Recovery via Gravity-View Coordinates
-### [Project Page](https://zju3dv.github.io/gvhmr) | [Paper](https://arxiv.org/pdf/xxxx.xxxxx.pdf)
+### [Project Page](https://zju3dv.github.io/gvhmr) | [Paper](https://arxiv.org/abs/2409.06662)
 
 > World-Grounded Human Motion Recovery via Gravity-View Coordinates  
 > [Zehong Shen](https://zehongs.github.io/)<sup>\*</sup>, 
@@ -20,8 +20,8 @@
 ## TODO List and ETA
 - [x] Code for reproducing the train and test results (2024-8-5)
 - [x] Demo code (2024-8-5)
-- [x] Project page, Repository README (2024-9-4)
-- [ ] Arxiv paper link (~2024-9)
+- [x] Code release (2024-9-4)
+- [x] Arxiv paper link (2024-9-10)
 
 
 ## Setup
