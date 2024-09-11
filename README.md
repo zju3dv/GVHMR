@@ -22,6 +22,7 @@
 - [x] Demo code (2024-8-5)
 - [x] Code release (2024-9-4)
 - [x] Arxiv paper link (2024-9-10)
+- [ ] HuggingFace demo (2024-9-16)
 
 
 ## Setup
