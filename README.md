@@ -1,4 +1,4 @@
-# World-Grounded Human Motion Recovery via Gravity-View Coordinates
+# GVHMR: World-Grounded Human Motion Recovery via Gravity-View Coordinates
 ### [Project Page](https://zju3dv.github.io/gvhmr) | [Paper](https://arxiv.org/abs/2409.06662)
 
 > World-Grounded Human Motion Recovery via Gravity-View Coordinates  
