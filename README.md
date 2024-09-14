@@ -14,7 +14,7 @@
 > SIGGRAPH Asia 2024
 
 <p align="center">
-    <img src=docs/example_video/project_teaser.gif alt="animated" />
+    <img src=docs/example_video/project_teas**er**.gif alt="animated" />
 </p>
 
 ## TODO List and ETA
@@ -23,6 +23,7 @@
 - [x] Code release (2024-9-4)
 - [x] Arxiv paper link (2024-9-10)
 - [x] Google Colab demo (2024-9-15)
+- [x] HuggingFace demo (2024-9-15)
 
 
 ## Setup
@@ -31,7 +32,9 @@ Please see [installation](docs/INSTALL.md) for details.
 
 ## Quick Start
 
-### [<img src="https://i.imgur.com/QCojoJk.png" width="30"> Google Colab for GVHMR](https://colab.research.google.com/drive/1N9WSchizHv2bfQqkE9Wuiegw_OT7mtGj?usp=sharing)
+### [<img src="https://i.imgur.com/QCojoJk.png" width="30"> Google Colab demo for GVHMR](https://colab.research.google.com/drive/1N9WSchizHv2bfQqkE9Wuiegw_OT7mtGj?usp=sharing)
+
+### [<img src="https://s2.loli.net/2024/09/15/aw3rElfQAsOkNCn.png" width="20"> HuggingFace demo for GVHMR](https://huggingface.co/spaces/LittleFrog/GVHMR)
 
 ### Demo
 Demo entries are provided in `tools/demo`. Use `-s` to skip visual odometry if you know the camera is static, otherwise the camera will be estimated by DPVO.
