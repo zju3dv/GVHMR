@@ -1,7 +1,7 @@
 # GVHMR: World-Grounded Human Motion Recovery via Gravity-View Coordinates
 ### [Project Page](https://zju3dv.github.io/gvhmr) | [Paper](https://arxiv.org/abs/2409.06662)
 
-> World-Grounded Human Motion Recovery via Gravity-View Coordinates
+> World-Grounded Human Motion Recovery via Gravity-View Coordinates  
 > [Zehong Shen](https://zehongs.github.io/)<sup>\*</sup>,
 [Huaijin Pi](https://phj128.github.io/)<sup>\*</sup>,
 [Yan Xia](https://isshikihugh.github.io/scholar),
@@ -10,7 +10,7 @@
 [Zechen Hu](https://zju3dv.github.io/gvhmr),
 [Hujun Bao](http://www.cad.zju.edu.cn/home/bao/),
 [Ruizhen Hu](https://csse.szu.edu.cn/staff/ruizhenhu/),
-[Xiaowei Zhou](https://xzhou.me/)
+[Xiaowei Zhou](https://xzhou.me/)  
 > SIGGRAPH Asia 2024
 
 <p align="center">
