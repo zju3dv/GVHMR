@@ -17,9 +17,10 @@ cd third-party/DPVO
 wget https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.zip
 unzip eigen-3.4.0.zip -d thirdparty && rm -rf eigen-3.4.0.zip
 pip install torch-scatter -f "https://data.pyg.org/whl/torch-2.3.0+cu121.html"
+pip install numba pypose
 export CUDA_HOME=/usr/local/cuda-12.1/
 export PATH=$PATH:/usr/local/cuda-12.1/bin/
-pip install .
+pip install -e .
 ```
 
 ## Inputs & Outputs
@@ -38,7 +39,7 @@ mkdir -p inputs/checkpoints
 
 inputs/checkpoints/
 ├── body_models/smplx/
-│   └── SMPLX_{GENDER}.npz # SMPLX (We predict SMPLX params + evaluation) 
+│   └── SMPLX_{GENDER}.npz # SMPLX (We predict SMPLX params + evaluation)
 └── body_models/smpl/
     └── SMPL_{GENDER}.pkl  # SMPL (rendering and evaluation)
 
@@ -59,10 +60,10 @@ inputs/checkpoints/
 
 **Data**
 
-We provide preprocessed data for training and evaluation. 
+We provide preprocessed data for training and evaluation.
 Note that we do not intend to distribute the original datasets, and you need to download them (annotation, videos, etc.) from the original websites.
 *We're unable to provide the original data due to the license restrictions.*
-By downloading the preprocessed data, you agree to the original dataset's terms of use and use the data for research purposes only. 
+By downloading the preprocessed data, you agree to the original dataset's terms of use and use the data for research purposes only.
 
 You can download them from [Google-Drive](https://drive.google.com/drive/folders/10sEef1V_tULzddFxzCmDUpsIqfv7eP-P?usp=drive_link). Please place them in the "inputs" folder and execute the following commands:
 
