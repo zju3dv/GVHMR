@@ -14,7 +14,7 @@
 > SIGGRAPH Asia 2024
 
 <p align="center">
-    <img src=docs/example_video/project_teas**er**.gif alt="animated" />
+    <img src=docs/example_video/project_teaser.gif alt="animated" />
 </p>
 
 ## TODO List and ETA
