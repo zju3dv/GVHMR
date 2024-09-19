@@ -17,15 +17,6 @@
     <img src=docs/example_video/project_teaser.gif alt="animated" />
 </p>
 
-## TODO List and ETA
-- [x] Code for reproducing the train and test results (2024-8-5)
-- [x] Demo code (2024-8-5)
-- [x] Code release (2024-9-4)
-- [x] Arxiv paper link (2024-9-10)
-- [x] Google Colab demo (2024-9-15)
-- [x] HuggingFace demo (2024-9-15)
-
-
 ## Setup
 
 Please see [installation](docs/INSTALL.md) for details.
