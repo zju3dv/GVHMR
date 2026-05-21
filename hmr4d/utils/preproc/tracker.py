@@ -72,15 +72,10 @@ class Tracker:
 
         return id_to_frame_ids, id_to_bbx_xyxys, id_sorted
 
-    def get_one_track(self, video_path):
-        # track
-        track_history = self.track(video_path)
-
-        # parse track_history & use top1 track
-        id_to_frame_ids, id_to_bbx_xyxys, id_sorted = self.sort_track_length(track_history, video_path)
-        track_id = id_sorted[0]
-        frame_ids = torch.tensor(id_to_frame_ids[track_id])  # (N,)
-        bbx_xyxys = torch.tensor(id_to_bbx_xyxys[track_id])  # (N, 4)
+    @staticmethod
+    def build_one_track(video_path, frame_ids, bbx_xyxys):
+        frame_ids = torch.as_tensor(frame_ids).long()
+        bbx_xyxys = torch.as_tensor(bbx_xyxys).float()
 
         # interpolate missing frames
         mask = frame_id_to_mask(frame_ids, get_video_lwh(video_path)[0])
@@ -93,3 +88,30 @@ class Tracker:
         bbx_xyxy_one_track = moving_average_smooth(bbx_xyxy_one_track, window_size=5, dim=0)
 
         return bbx_xyxy_one_track
+
+    def get_track(self, video_path, track_id=None, track_history=None):
+        if track_history is None:
+            track_history = self.track(video_path)
+
+        id_to_frame_ids, id_to_bbx_xyxys, id_sorted = self.sort_track_length(track_history, video_path)
+        if not id_sorted:
+            raise RuntimeError(f"No person track found in video: {video_path}")
+
+        selected_track_id = id_sorted[0] if track_id is None else track_id
+        if selected_track_id not in id_to_frame_ids:
+            raise KeyError(f"Track id {selected_track_id} was not found. Available ids: {id_sorted}")
+
+        return self.build_one_track(
+            video_path,
+            id_to_frame_ids[selected_track_id],
+            id_to_bbx_xyxys[selected_track_id],
+        )
+
+    def get_one_track(self, video_path):
+        # track
+        track_history = self.track(video_path)
+
+        # parse track_history & use top1 track
+        id_to_frame_ids, id_to_bbx_xyxys, id_sorted = self.sort_track_length(track_history, video_path)
+        track_id = id_sorted[0]
+        return self.build_one_track(video_path, id_to_frame_ids[track_id], id_to_bbx_xyxys[track_id])

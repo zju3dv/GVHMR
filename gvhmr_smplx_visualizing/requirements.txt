@@ -1,0 +1,9 @@
+numpy
+torch
+torchvision
+torchaudio
+open3d
+smplx
+opencv-python
+scipy
+pyyaml

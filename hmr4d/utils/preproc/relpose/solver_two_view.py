@@ -91,6 +91,11 @@ class PycolmapRansacTwoViewGeometrySolver:
         return self.camera_matrix
 
     def solve(self, pts0, pts1):
+        min_matches = int(getattr(self.options, "min_num_inliers", 10))
+        if len(pts0) < min_matches or len(pts1) < min_matches:
+            print("[SimpleVO] Warning: not enough matches; reusing previous camera pose.")
+            return np.eye(4, dtype=np.float32)
+
         matches = np.stack([np.arange(len(pts0)), np.arange(len(pts0))], axis=-1)
         answer = pycolmap.estimate_calibrated_two_view_geometry(
             self.camera,
@@ -100,10 +105,14 @@ class PycolmapRansacTwoViewGeometrySolver:
             matches=matches,
             options=self.options,
         )
+        cam2_from_cam1 = None if answer is None else getattr(answer, "cam2_from_cam1", None)
+        if cam2_from_cam1 is None:
+            print("[SimpleVO] Warning: two-view geometry failed; reusing previous camera pose.")
+            return np.eye(4, dtype=np.float32)
 
         # cam2_from_cam1 means T_0_to_1 in our language
-        Rt = answer.cam2_from_cam1.matrix().astype(np.float32)  # shape (3, 4)
-        T = np.eye(4)
+        Rt = cam2_from_cam1.matrix().astype(np.float32)  # shape (3, 4)
+        T = np.eye(4, dtype=np.float32)
         T[:3] = Rt
         return T
 
