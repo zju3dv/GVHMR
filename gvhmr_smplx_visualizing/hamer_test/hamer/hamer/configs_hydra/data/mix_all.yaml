@@ -1,0 +1,31 @@
+# @package _global_
+defaults:
+  - /data_filtering: low1
+
+DATASETS:
+  TRAIN: 
+    FREIHAND-TRAIN:
+      WEIGHT: 0.25
+    INTERHAND26M-TRAIN:
+      WEIGHT: 0.25
+    MTC-TRAIN:
+      WEIGHT: 0.1
+    RHD-TRAIN:
+      WEIGHT: 0.05
+    COCOW-TRAIN:
+      WEIGHT: 0.1
+    HALPE-TRAIN:
+      WEIGHT: 0.05
+    MPIINZSL-TRAIN:
+      WEIGHT: 0.05
+    HO3D-TRAIN:
+      WEIGHT: 0.05
+    H2O3D-TRAIN:
+      WEIGHT: 0.05
+    DEX-TRAIN:
+      WEIGHT: 0.05
+  VAL:
+    FREIHAND-TRAIN:
+      WEIGHT: 1.0
+
+  MOCAP: FREIHAND-MOCAP

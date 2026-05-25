@@ -200,6 +200,22 @@ def load_data_dict(cfg):
     return data
 
 
+def filter_smplx_params(params):
+    allowed = {
+        "betas",
+        "body_pose",
+        "global_orient",
+        "transl",
+        "left_hand_pose",
+        "right_hand_pose",
+        "jaw_pose",
+        "leye_pose",
+        "reye_pose",
+        "expression",
+    }
+    return {k: v for k, v in params.items() if k in allowed}
+
+
 def render_incam(cfg):
     incam_video_path = Path(cfg.paths.incam_video)
     if incam_video_path.exists():
@@ -207,13 +223,12 @@ def render_incam(cfg):
         return
 
     pred = torch.load(cfg.paths.hmr4d_results)
-    smplx = make_smplx("supermotion").cuda()
-    smplx2smpl = torch.load("hmr4d/utils/body_model/smplx2smpl_sparse.pt").cuda()
-    faces_smpl = make_smplx("smpl").faces
+    smplx = make_smplx("supermotion_fullhands").cuda()
+    faces_smplx = smplx.faces
 
-    # smpl
-    smplx_out = smplx(**to_cuda(pred["smpl_params_incam"]))
-    pred_c_verts = torch.stack([torch.matmul(smplx2smpl, v_) for v_ in smplx_out.vertices])
+    # SMPLX
+    smplx_out = smplx(**to_cuda(filter_smplx_params(pred["smpl_params_incam"])))
+    verts_incam = smplx_out.vertices
 
     # -- rendering code -- #
     video_path = cfg.video_path
@@ -221,12 +236,11 @@ def render_incam(cfg):
     K = pred["K_fullimg"][0]
 
     # renderer
-    renderer = Renderer(width, height, device="cuda", faces=faces_smpl, K=K)
+    renderer = Renderer(width, height, device="cuda", faces=faces_smplx, K=K, bin_size=0)
     reader = get_video_reader(video_path)  # (F, H, W, 3), uint8, numpy
     bbx_xys_render = torch.load(cfg.paths.bbx)["bbx_xys"]
 
     # -- render mesh -- #
-    verts_incam = pred_c_verts
     writer = get_writer(incam_video_path, fps=30, crf=CRF)
     for i, img_raw in tqdm(enumerate(reader), total=get_video_lwh(video_path)[0], desc=f"Rendering Incam"):
         img = renderer.render_mesh(verts_incam[i].cuda(), img_raw, [0.8, 0.8, 0.8])
@@ -250,29 +264,29 @@ def render_global(cfg):
 
     debug_cam = False
     pred = torch.load(cfg.paths.hmr4d_results)
-    smplx = make_smplx("supermotion").cuda()
-    smplx2smpl = torch.load("hmr4d/utils/body_model/smplx2smpl_sparse.pt").cuda()
-    faces_smpl = make_smplx("smpl").faces
-    J_regressor = torch.load("hmr4d/utils/body_model/smpl_neutral_J_regressor.pt").cuda()
+    smplx = make_smplx("supermotion_fullhands").cuda()
+    faces_smplx = smplx.faces
 
-    # smpl
-    smplx_out = smplx(**to_cuda(pred["smpl_params_global"]))
-    pred_ay_verts = torch.stack([torch.matmul(smplx2smpl, v_) for v_ in smplx_out.vertices])
+    # SMPLX
+    smplx_out = smplx(**to_cuda(filter_smplx_params(pred["smpl_params_global"])))
+    pred_ay_verts = smplx_out.vertices
+    pred_ay_joints = smplx_out.joints
 
-    def move_to_start_point_face_z(verts):
+    def move_to_start_point_face_z(verts, joints):
         "XZ to origin, Start from the ground, Face-Z"
-        # position
         verts = verts.clone()  # (L, V, 3)
-        offset = einsum(J_regressor, verts[0], "j v, v i -> j i")[0]  # (3)
-        offset[1] = verts[:, :, [1]].min()
+        joints = joints.clone()  # (L, J, 3)
+        offset = joints[0, 0].clone()  # root joint of first frame
+        offset[1] = verts[:, :, 1].min()
         verts = verts - offset
+        joints = joints - offset
         # face direction
-        T_ay2ayfz = compute_T_ayfz2ay(einsum(J_regressor, verts[[0]], "j v, l v i -> l j i"), inverse=True)
+        T_ay2ayfz = compute_T_ayfz2ay(joints[[0]], inverse=True)
         verts = apply_T_on_points(verts, T_ay2ayfz)
-        return verts
+        joints = apply_T_on_points(joints, T_ay2ayfz)
+        return verts, joints
 
-    verts_glob = move_to_start_point_face_z(pred_ay_verts)
-    joints_glob = einsum(J_regressor, verts_glob, "j v, l v i -> l j i")  # (L, J, 3)
+    verts_glob, joints_glob = move_to_start_point_face_z(pred_ay_verts, pred_ay_joints)
     global_R, global_T, global_lights = get_global_cameras_static(
         verts_glob.cpu(),
         beta=2.0,
@@ -286,8 +300,7 @@ def render_global(cfg):
     _, _, K = create_camera_sensor(width, height, 24)  # render as 24mm lens
 
     # renderer
-    renderer = Renderer(width, height, device="cuda", faces=faces_smpl, K=K)
-    # renderer = Renderer(width, height, device="cuda", faces=faces_smpl, K=K, bin_size=0)
+    renderer = Renderer(width, height, device="cuda", faces=faces_smplx, K=K, bin_size=0)
 
     # -- render mesh -- #
     scale, cx, cz = get_ground_params_from_points(joints_glob[:, 0], verts_glob)

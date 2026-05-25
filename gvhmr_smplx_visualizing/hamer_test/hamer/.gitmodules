@@ -1,0 +1,4 @@
+[submodule "third-party/ViTPose"]
+	path = third-party/ViTPose
+	url = https://github.com/ViTAE-Transformer/ViTPose.git
+	branch = main

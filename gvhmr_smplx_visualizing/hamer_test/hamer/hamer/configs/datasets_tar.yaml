@@ -1,0 +1,42 @@
+FREIHAND-TRAIN:
+    TYPE: ImageDataset
+    URLS: hamer_training_data/dataset_tars/freihand-train/{000000..000130}.tar
+    epoch_size: 130_240
+INTERHAND26M-TRAIN:
+    TYPE: ImageDataset
+    URLS: hamer_training_data/dataset_tars/interhand26m-train/{000000..001056}.tar
+    epoch_size: 1_424_632
+HALPE-TRAIN:
+    TYPE: ImageDataset
+    URLS: hamer_training_data/dataset_tars/halpe-train/{000000..000022}.tar
+    epoch_size: 34_289
+COCOW-TRAIN:
+    TYPE: ImageDataset
+    URLS: hamer_training_data/dataset_tars/cocow-train/{000000..000036}.tar
+    epoch_size: 78_666
+MTC-TRAIN:
+    TYPE: ImageDataset
+    URLS: hamer_training_data/dataset_tars/mtc-train/{000000..000306}.tar
+    epoch_size: 363_947
+RHD-TRAIN:
+    TYPE: ImageDataset
+    URLS: hamer_training_data/dataset_tars/rhd-train/{000000..000041}.tar
+    epoch_size: 61_705
+MPIINZSL-TRAIN:
+    TYPE: ImageDataset
+    URLS: hamer_training_data/dataset_tars/mpiinzsl-train/{000000..000015}.tar
+    epoch_size: 15_184
+HO3D-TRAIN:
+    TYPE: ImageDataset
+    URLS: hamer_training_data/dataset_tars/ho3d-train/{000000..000083}.tar
+    epoch_size: 83_325
+H2O3D-TRAIN:
+    TYPE: ImageDataset
+    URLS: hamer_training_data/dataset_tars/h2o3d-train/{000000..000060}.tar
+    epoch_size: 121_996
+DEX-TRAIN:
+    TYPE: ImageDataset
+    URLS: hamer_training_data/dataset_tars/dex-train/{000000..000406}.tar
+    epoch_size: 406_888
+FREIHAND-MOCAP:
+    DATASET_FILE: hamer_training_data/freihand_mocap.npz

@@ -1,0 +1,13 @@
+# Virtual environment ignores:
+venv/
+.venv/
+.hamer/
+
+# Ignoring the .tar.gz files because of the fetching scripts:
+*.tar.gz
+_DATA/
+
+# Ignoring .zip files becuase of the mano_v1_2.zip download with
+# the MANO_RIGHT.pkl file inside:
+*.zip
+mano_v1_2/
