@@ -30,6 +30,21 @@ def make_smplx(type="neu_fullpose", **kwargs):
         }
         bm_kwargs.update(kwargs)
         model = BodyModelSMPLX(model_path=PROJ_ROOT / "inputs/checkpoints/body_models", **bm_kwargs)
+    elif type == "supermotion_fullhands":
+        bm_kwargs = {
+            "model_type": "smplx",
+            "gender": "neutral",
+            "use_pca": False,
+            "flat_hand_mean": False,
+            "create_left_hand_pose": True,
+            "create_right_hand_pose": True,
+            "create_expression": True,
+            "create_jaw_pose": True,
+            "create_leye_pose": True,
+            "create_reye_pose": True,
+        }
+        bm_kwargs.update(kwargs)
+        model = BodyModelSMPLX(model_path=PROJ_ROOT / "inputs/checkpoints/body_models", **bm_kwargs)
     elif type == "supermotion_EVAL3DPW":
         # SuperMotion is trained on BEDLAM dataset, the smplx config is the same except only 10 betas are used
         bm_kwargs = {

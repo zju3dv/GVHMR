@@ -79,6 +79,11 @@ class Pipeline(nn.Module):
             "body_pose": decode_dict["body_pose"],  # (B, L, 63)
             "betas": decode_dict["betas"],  # (B, L, 10)
             "global_orient": decode_dict["global_orient"],  # (B, L, 3)
+            "left_hand_pose": decode_dict["left_hand_pose"],
+            "right_hand_pose": decode_dict["right_hand_pose"],
+            "jaw_pose": decode_dict["jaw_pose"],
+            "leye_pose": decode_dict["leye_pose"],
+            "reye_pose": decode_dict["reye_pose"],
             "transl": compute_transl_full_cam(model_output["pred_cam"], inputs["bbx_xys"], inputs["K_fullimg"]),
         }
         if not train:
@@ -91,6 +96,11 @@ class Pipeline(nn.Module):
             outputs["pred_smpl_params_global"] = {
                 "body_pose": decode_dict["body_pose"],
                 "betas": decode_dict["betas"],
+                "left_hand_pose": decode_dict["left_hand_pose"],
+                "right_hand_pose": decode_dict["right_hand_pose"],
+                "jaw_pose": decode_dict["jaw_pose"],
+                "leye_pose": decode_dict["leye_pose"],
+                "reye_pose": decode_dict["reye_pose"],
                 **pred_smpl_params_global,
             }
             outputs["static_conf_logits"] = model_output["static_conf_logits"]

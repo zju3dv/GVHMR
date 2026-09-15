@@ -208,6 +208,11 @@ class GvhmrPL(pl.LightningModule):
             smpl_params_avg["global_orient"] = avg_smplx_aa(
                 smpl_params1["global_orient"], smpl_params2["global_orient"]
             )
+            smpl_params_avg["left_hand_pose"] = smpl_params1["left_hand_pose"]
+            smpl_params_avg["right_hand_pose"] = smpl_params1["right_hand_pose"]
+            smpl_params_avg["jaw_pose"] = smpl_params1["jaw_pose"]
+            smpl_params_avg["leye_pose"] = smpl_params1["leye_pose"]
+            smpl_params_avg["reye_pose"] = smpl_params1["reye_pose"]
             outputs["pred_smpl_params_incam"] = smpl_params_avg
 
             # Then update global results

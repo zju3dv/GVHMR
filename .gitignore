@@ -176,4 +176,11 @@ torchsparse
 tensorboard
 
 # glove
-glove
+glove_DATA/
+hamer/_DATA/
+hamer/demo_out/
+*.ckpt
+*.pkl
+*.obj
+*.ply
+*.mp4
